@@ -1,0 +1,318 @@
+{
+  "name": "My workflow 4",
+  "nodes": [
+    {
+      "parameters": {
+        "path": "lead-gen",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "a6a12d0a-bbef-4ba6-a857-4c569257a5ec",
+      "name": "Webhook",
+      "webhookId": "7255f359-a57f-4468-b64f-2d6f3a194bf3"
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "{\n  \"keyword\": \"Gym\",\n  \"location\": \"Bhopal\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        208,
+        0
+      ],
+      "id": "e52869de-cb8b-4793-9c6e-ebae48d41985",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "url": "https://serpapi.com/search.json",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "engine",
+              "value": "google_maps"
+            },
+            {
+              "name": "q",
+              "value": "Gym in Bhopal"
+            },
+            {
+              "name": "api_key",
+              "value": "9db2a42600fb373d1da115ad18ea4f1f8b17f07718128028b2b2886e5e5027cf"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        416,
+        0
+      ],
+      "id": "9b1269c6-9598-4093-9334-1b0f8e975874",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "b77e1fd3-d74a-407f-af6a-1d1966725ccf",
+              "leftValue": "={{$json[\"local_results\"][0][\"phone\"]}}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        624,
+        0
+      ],
+      "id": "65a99af5-a6fd-48f0-86a7-2a54ea6fe40b",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a6755551-c83b-4a15-9127-c4b15b99e2a3",
+              "name": "name",
+              "value": "= {{$json[\"local_results\"][0][\"title\"]}}",
+              "type": "string"
+            },
+            {
+              "id": "388bf695-233e-4a97-98a7-767430309e95",
+              "name": "phone",
+              "value": "={{$json[\"local_results\"][0][\"phone\"]}}",
+              "type": "string"
+            },
+            {
+              "id": "6a9f21f4-66bd-45c1-9065-de7c2151361d",
+              "name": "address",
+              "value": "={{$json[\"local_results\"][0][\"address\"]}}",
+              "type": "string"
+            },
+            {
+              "id": "0459e5f6-0110-4551-ab55-fe4c6a9111e4",
+              "name": "rating",
+              "value": "= {{$json[\"local_results\"][0][\"rating\"]}}",
+              "type": "string"
+            },
+            {
+              "id": "6aa04846-d129-4495-8215-629a71bf4a52",
+              "name": "website",
+              "value": "= {{$json[\"local_results\"][0][\"website\"]}}",
+              "type": "string"
+            },
+            {
+              "id": "d6014646-a60d-4042-aa14-7af2cd99d87d",
+              "name": "",
+              "value": "",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        832,
+        -64
+      ],
+      "id": "ea221cf1-9c63-4c98-9d25-fd6fe826f558",
+      "name": "Edit Fields1"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "197rG3JZc7IVLOHUmlN9lw89iGWmxDNiTXbLYhYsxmWw",
+          "mode": "list",
+          "cachedResultName": "Leads Data",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/197rG3JZc7IVLOHUmlN9lw89iGWmxDNiTXbLYhYsxmWw/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/197rG3JZc7IVLOHUmlN9lw89iGWmxDNiTXbLYhYsxmWw/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "name": "={{$json[\"name\"]}}",
+            "phone": "={{$json[\"phone\"]}}",
+            "address": "={{$json[\"address\"]}}",
+            "reting": "={{$json[\"rating\"]}}",
+            "website": "={{$json[\"website\"]}} ✅"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "name",
+              "displayName": "name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "phone",
+              "displayName": "phone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "address",
+              "displayName": "address",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "reting",
+              "displayName": "reting",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "website",
+              "displayName": "website",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1040,
+        -64
+      ],
+      "id": "0b019e9e-79bd-454d-bc33-7b60788e858e",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "5SHltf9pxQlqyXuA",
+          "name": "Google Sheets OAuth2 API"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "623f85ca-45ff-4854-a2c4-cc5cae444c95",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "aeb6265507b2f1258dfd0e49e53697865efd71aecf3f859821f1b4a7d30f41ee"
+  },
+  "id": "pXp5MIp8wfJYwKJa",
+  "tags": []
+}
